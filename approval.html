@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Graph</title>
+	<title>Approval</title>
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.min.css">
 
@@ -20,10 +20,6 @@
 	.qtip {
 		font-size: 13px;
 	}
-
-	/*#graph {
-		border: 1px solid black;
-	}*/
 </style>
 </head>
 <body>
@@ -270,7 +266,6 @@
 				var box = text.getBBox();
 				var rect = paper.rect(box.x, box.y, box.width, box.height).attr({'fill': 'white', "stroke-width": "0px"});
 				text.toFront();
- 
 			});
 
 			// y axis
@@ -278,29 +273,6 @@
 			p1.attr({"stroke-width": 3, "stroke-linecap": "butt"});
 		};
 		draw(h);
-
-    /*
-    // in print:
-    college house approval vs alcohol use
-        you are more likely to approve of college houses the more you drink
-    class council approval vs class year
-        2019 hates their class council
-    drinking frequency vs class year
-        people drink a lot freshman year and senior year, less in the middle
-    athletes vs athletics approval
-        athletes like the athletics dept
-    substance use
-        
-    cheating
-    happy
-    give a damn
-    
-    // online:
-    all of the above AND
-    % athlete by major
-    political leaning by major
-    */
 	</script>
-
 </body>
 </html>
