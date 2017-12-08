@@ -8,7 +8,8 @@
 
 	<style type="text/css" media="screen">
 	body {
-		padding: 10px;
+		background-color: #fff;
+		overflow: hidden;
 	}
 
 	.qtip-default {
@@ -156,7 +157,7 @@
 		var h = $(window).height();
 		function draw(h) {
 			var paper = Raphael('graph', h/2, h);
-			paper.setViewBox(0, 0, 400, 800, true);
+			paper.setViewBox(0, 40, 400, 800, true);
 			// rectangle -- comment out later
 			// var rec = paper.rect(10, 10, 380, 780).attr({ stroke: 'black' });
 			var xScale = 2.5
