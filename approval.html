@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Graph</title>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.min.css">
+
+	<style type="text/css" media="screen">
+	body {
+		padding: 10px;
+	}
+
+	.qtip-default {
+		border: 1px solid #ccc;
+		background-color: #fff;
+		color: #222;
+	}
+
+	.qtip {
+		font-size: 13px;
+	}
+
+	/*#graph {
+		border: 1px solid black;
+	}*/
+</style>
+</head>
+<body>
+	<div id="graph"></div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.3/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/basic/jquery.qtip.min.js" type="text/javascript" charset="utf-8"></script>
+
+	<script type="text/javascript" charset="utf-8">
+
+		$(document).ready(function() {
+			$('#graph')
+		})
+
+		var data = [
+		{
+			'name': "Bowdoin College",
+			'data': [34.03, 51.28, 10.72, 3.5, 0.47]
+		},
+		{
+			'name': "President Rose",
+			'data': [24.01, 48.72, 22.14, 4.20, 0.93]
+		},
+		{
+			'name': "Office of the Dean of Academic Affairs",
+			'data': [8.62, 33.57, 50.82, 4.90, 2.10]
+		},
+		{
+			'name': "Office of the Dean of Student Affairs",
+			'data': [8.39, 34.27, 46.62, 7.69, 3.03]
+		},
+		{
+			'name': "The Faculty",
+			'data': [48.48, 39.86, 10.49, 0.70, 0.47]
+		},
+		{
+			'name': "Residential Life",
+			'data': [19.58, 44.99, 18.65, 12.12, 4.66]
+		},
+		{
+			'name': "Safety and Security",
+			'data': [62.24, 24.48, 9.32, 3.26, 0.70]
+		},
+		{
+			'name': "Dining Services",
+			'data': [75.52, 16.08, 7.46, 0.93, 0.00]
+		},
+		{
+			'name': "Registrar",
+			'data': [16.78, 35.66, 35.90, 8.16, 3.50]
+		},
+		{
+			'name': "The Health Center",
+			'data': [21.21, 38.23, 28.44, 10.26, 1.86]
+		},
+		{
+			'name': "Information Technology",
+			'data': [21.21, 38.23, 28.44, 10.26, 1.86]
+		},
+		{
+			'name': "Department of Athletics",
+			'data': [6.53, 22.14, 49.65, 16.08, 5.59]
+		},
+		{
+			'name': "Career Planning Center",
+			'data': [12.82, 34.97, 36.83, 12.82, 2.56]
+		},
+		{
+			'name': "Counseling Services",
+			'data': [10.49, 19.11, 56.18, 11.42, 2.80]
+		},
+		{
+			'name': "Office of Off-Campus Studies",
+			'data': [10.72, 31.00, 50.35, 6.53, 1.40]
+		},
+		{
+			'name': "College House System",
+			'data': [12.59, 35.20, 30.77, 15.62, 5.83]
+		},
+		{
+			'name': "The Libraries",
+			'data': [38.23, 41.49, 15.38, 4.20, 0.70]
+		},
+		{
+			'name': "Bowdoin Student Government",
+			'data': [9.32, 28.90, 44.76, 11.66, 5.36]
+		},
+		{
+			'name': "BSG President Irfan Alam",
+			'data': [19.58, 27.74, 45.45, 4.66, 2.56]
+		},
+		{
+			'name': "Your Class Council",
+			'data': [11.89, 27.74, 46.39, 8.62, 5.36]
+		},
+		{
+			'name': "Student Activites Funding Committee",
+			'data': [9.32, 20.98, 55.48, 10.02, 4.20]
+		},
+		{
+			'name': "The Bowdoin Orient",
+			'data': [13.99, 42.42, 28.44, 10.49, 4.66]
+		},
+		{
+			'name': "Judicial Board",
+			'data': [6.06, 23.78, 57.11, 9.32, 3.73]
+		},
+		{
+			'name': "Entertainment Board",
+			'data': [10.72, 37.06, 44.29, 5.13, 2.80]
+		},
+		{
+			'name': "Brunswick, Maine",
+			'data': [39.63, 38.69, 17.95, 2.56, 1.17]
+		},
+		{
+			'name': "Brunswick Police Department",
+			'data': [14.69, 24.01, 53.15, 5.13, 3.03]
+		}
+		];
+
+// // var paper = Raphael("graph", 500,500);
+// // var p1 = paper.path("M300,50L300,400Z");
+		
+		data = data.sort(function(a, b) {
+			if(a['data'][0] + a['data'][1] > b['data'][0] + b['data'][1]) {
+				return -1;
+			} else {
+				return 1;
+			}
+		});
+
+		var h = $(window).height();
+		function draw(h) {
+			var paper = Raphael('graph', h/2*1.5, h*1.5);
+			paper.setViewBox(0, 0, 400, 800, true);
+			// rectangle -- comment out later
+			// var rec = paper.rect(10, 10, 380, 780).attr({ stroke: 'black' });
+			var xScale = 2.5
+
+			// other axes
+			var p2 = paper.path("M" + (120 + 20*xScale) + ",80L" + (120 + 20*xScale) + ",780Z");
+			p2.attr({"stroke-width": 1, "stroke": "#777"});
+			paper.text(112 + 20*xScale, 70, "20%").attr({"font-size": "9px", "font-weight": "300", 'text-anchor': 'start'});
+
+			var p3 = paper.path("M" + (120 + 40*xScale) + ",80L" + (120 + 40*xScale) + ",780Z");
+			p3.attr({"stroke-width": 1, "stroke": "#777"});
+			paper.text(112 + 40*xScale, 70, "40%").attr({"font-size": "9px", "font-weight": "300", 'text-anchor': 'start'});
+
+			var p4 = paper.path("M" + (120 + 60*xScale) + ",80L" + (120 + 60*xScale) + ",780Z");
+			p4.attr({"stroke-width": 1, "stroke": "#777"});
+			paper.text(112 + 60*xScale, 70, "60%").attr({"font-size": "9px", "font-weight": "300", 'text-anchor': 'start'});
+
+			var p5 = paper.path("M" + (120 + 80*xScale) + ",80L" + (120 + 80*xScale) + ",780Z");
+			p5.attr({"stroke-width": 1, "stroke": "#777"});
+			paper.text(112 + 80*xScale, 70, "80%").attr({"font-size": "9px", "font-weight": "300", 'text-anchor': 'start'});
+
+			var p6 = paper.path("M" + (120 - 20*xScale) + ",80L" + (120 - 20*xScale) + ",780Z");
+			p6.attr({"stroke-width": 1, "stroke": "#777"});
+			paper.text(112 - 20*xScale, 70, "20%").attr({"font-size": "9px", "font-weight": "300", 'text-anchor': 'start'});
+
+			paper.rect(0, 100, 100, 100).attr({fill: "#fff","stroke-width": "0"})
+			paper.rect(0, 100, 15, 15).attr({fill: "#6c190f","stroke-width": "0"})
+			paper.rect(0, 120, 15, 15).attr({fill: "#d16a60","stroke-width": "0"})
+			paper.rect(0, 140, 15, 15).attr({fill: "#0a2945","stroke-width": "0"})
+			paper.rect(0, 160, 15, 15).attr({fill: "#5a8ab5","stroke-width": "0"})
+			paper.text(20, 107, "Strongly Disapprove").attr({"font-size": "9px", "font-weight": "300", 'text-anchor': 'start'});
+			paper.text(20, 127, "Disapprove").attr({"font-size": "9px", "font-weight": "300", 'text-anchor': 'start'});
+			paper.text(20, 147, "Approve").attr({"font-size": "9px", "font-weight": "300", 'text-anchor': 'start'});
+			paper.text(20, 167, "Strongly Approve").attr({"font-size": "9px", "font-weight": "300", 'text-anchor': 'start'});
+
+			data.forEach(function(metric, index) {
+				console.log(metric['name'], metric['data']);
+				$(paper.rect( // approval rect
+					120, // x coord start
+					100 + index * 26.8, // y coord start
+					metric['data'][1]*xScale, // width
+					10 // height
+				).attr({
+					fill: "#5a8ab5",
+					"stroke-width": "0",
+				}).node).qtip({
+					content: metric['name'] + ": " + metric['data'][1] + "% approve",
+					position: {
+						target: 'mouse', // Track the mouse as the positioning target
+						adjust: { x: 5, y: 5 } // Offset it slightly from under the mouse
+					}
+				});
+
+				$(paper.rect( // big approval rect
+					120 + metric['data'][1]*xScale, // x coord start
+					100 + index * 26.8, // y coord start
+					metric['data'][0]*xScale, // width
+					10 // height
+				).attr({
+					fill: "#0a2945",
+					"stroke-width": "0",
+				}).node).qtip({
+					content: metric['name'] + ": " + metric['data'][0] + "% strongly approve",
+					position: {
+						target: 'mouse', // Track the mouse as the positioning target
+						adjust: { x: 5, y: 5 } // Offset it slightly from under the mouse
+					}
+				});
+
+				$(paper.rect( // disapproval rect
+					120 - metric['data'][3]*xScale, // x coord start
+					100 + index * 26.8, // y coord start
+					metric['data'][3]*xScale, // width
+					10 // height
+				).attr({
+					fill: "#d16a60",
+					"stroke-width": "0",
+				}).node).qtip({
+					content: metric['name'] + ": " + metric['data'][3] + "% disapprove",
+					position: {
+						target: 'mouse', // Track the mouse as the positioning target
+						adjust: { x: 5, y: 5 } // Offset it slightly from under the mouse
+					}
+				});
+
+				$(paper.rect( // big disapproval rect
+					120 - metric['data'][3]*xScale - metric['data'][4]*xScale, // x coord start
+					100 + index * 26.8, // y coord start
+					metric['data'][4]*xScale, // width
+					10 // height
+				).attr({
+					fill: "#6c190f",
+					"stroke-width": "0",
+				}).node).qtip({
+					content: metric['name'] + ": " + metric['data'][4] + "% strongly disapprove",
+					position: {
+						target: 'mouse', // Track the mouse as the positioning target
+						adjust: { x: 5, y: 5 } // Offset it slightly from under the mouse
+					}
+				});
+
+				var text = paper.text(
+					123, 
+					94 + index * 26.8, 
+					metric['name']
+				).attr({"font-size": "10px", "font-weight": "300", 'text-anchor': 'start'});
+				var box = text.getBBox();
+				var rect = paper.rect(box.x, box.y, box.width, box.height).attr({'fill': 'white', "stroke-width": "0px"});
+				text.toFront();
+ 
+			});
+
+			// y axis
+			var p1 = paper.path("M120,80L120,780Z");
+			p1.attr({"stroke-width": 3, "stroke-linecap": "butt"});
+		};
+		draw(h);
+
+    /*
+    // in print:
+    college house approval vs alcohol use
+        you are more likely to approve of college houses the more you drink
+    class council approval vs class year
+        2019 hates their class council
+    drinking frequency vs class year
+        people drink a lot freshman year and senior year, less in the middle
+    athletes vs athletics approval
+        athletes like the athletics dept
+    substance use
+        
+    cheating
+    happy
+    give a damn
+    
+    // online:
+    all of the above AND
+    % athlete by major
+    political leaning by major
+    */
+	</script>
+
+</body>
+</html>
