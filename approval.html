@@ -155,7 +155,7 @@
 
 		var h = $(window).height();
 		function draw(h) {
-			var paper = Raphael('graph', h/2*1.5, h*1.5);
+			var paper = Raphael('graph', h/2, h);
 			paper.setViewBox(0, 0, 400, 800, true);
 			// rectangle -- comment out later
 			// var rec = paper.rect(10, 10, 380, 780).attr({ stroke: 'black' });
